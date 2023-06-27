@@ -5,6 +5,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('/api/v1');
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -20,6 +21,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-document', app, document);
 
-  await app.listen(3000);
+  await app.listen(Number(process.env.NODE_PORT) || 3000);
 }
 bootstrap();
