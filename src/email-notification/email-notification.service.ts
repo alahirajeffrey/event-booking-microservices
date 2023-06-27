@@ -2,8 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createTransport } from 'nodemailer';
 import * as Mail from 'nodemailer/lib/mailer';
-import EventStatusEnum from 'src/enums/event-status.enum';
 import QRCode from 'qrcode';
+import { SendOtpEmailDto } from './dto/send-otp.dto';
+import { SendEventDetailsEmailDto } from './dto/send-event-details.dto';
+import { SendBookingDetailsEmailDto } from './dto/send-booking-details.dto';
+import { SendPriceSetorUpdateEmail } from './dto/price-updated.dto';
 
 @Injectable()
 export class EmailNotificationService {
@@ -27,15 +30,14 @@ export class EmailNotificationService {
 
   /**
    * function to send otp email
-   * @param to : email of the reciepient
-   * @param otp : otp to be sent
+   * @param dto : send email dto
    */
-  async sendOtpEmail(to: string, otp: string) {
+  async sendOtpEmail(dto: SendOtpEmailDto) {
     const mailOptions = {
       from: 'alahirajeffrey@gmail.com',
-      to: to,
+      to: dto.to,
       subject: 'Verification Otp',
-      text: `Hi there, Here is your verification otp ${otp}`,
+      text: `Hi there, Here is your verification otp ${dto.otp}`,
     };
 
     await this.nodeMailerTransport
@@ -51,30 +53,20 @@ export class EmailNotificationService {
 
   /**
    * function to send event details
-   * @param to : email of the reciepient
-   * @param eventId : id of the event
-   * @param time : date and time of the event
-   * @param location : location of the  event
-   * @param eventStatus : status of the event i.e created, updated, deleted
+   * @param dto: send event details dto
    */
-  sendEventDetailsEmail = async (
-    to: string,
-    eventId: string,
-    time: Date,
-    location: string,
-    eventStatus: EventStatusEnum,
-  ) => {
+  sendEventDetailsEmail = async (dto: SendEventDetailsEmailDto) => {
     const mailOptions = {
       from: 'alahirajeffrey@gmail.com',
-      to: to,
-      subject: `Event ${eventStatus}`,
-      text: `Hi there, Your event has been ${eventStatus}. 
+      to: dto.to,
+      subject: `Event ${dto.eventStatus}`,
+      text: `Hi there, Your event has been ${dto.eventStatus}. 
     
-            Event id : ${eventId}
+            Event id : ${dto.eventId}
             
-            Time: ${time}
+            Time: ${dto.time}
             
-            location: ${location}`,
+            location: ${dto.location}`,
     };
 
     await this.nodeMailerTransport
@@ -90,17 +82,16 @@ export class EmailNotificationService {
 
   /**
    * function to send otp email
+   * @param dto: send price set or updated email
    * @param to : email of the reciepient
    * @param eventId : id of the event
    */
-  sendPriceSetorUpdateEmail = async (to: string, eventId: string) => {
+  sendPriceSetorUpdateEmail = async (dto: SendPriceSetorUpdateEmail) => {
     const mailOptions = {
       from: 'alahirajeffrey@gmail.com',
-      to: to,
+      to: dto.to,
       subject: 'Seat Price Updated',
-      text: `Hi there, 
-    
-    The seat price for your event with id: ${eventId} has been updated.`,
+      text: `Hi there, The seat price for your event with id: ${dto.eventId} has been updated.`,
     };
 
     await this.nodeMailerTransport
@@ -116,28 +107,17 @@ export class EmailNotificationService {
 
   /**
    * send booking details via email
-   * @param to : reciever email
-   * @param eventTitle : title of the event
-   * @param time : time of the event
-   * @param location : location of the event
-   * @param paymentId : payment id if the event is paid or null if it is free
+   * @param dto: send booking details email
    */
-  sendBookingEmail = async (
-    to: string,
-    eventTitle: string,
-    time: Date,
-    location: string,
-    paymentId: string | null,
-    subject: EventStatusEnum,
-  ) => {
-    const emailString = `${eventTitle} booked. \nEvent date: ${time}. \nLocation: ${location}. \nPaymentId: ${paymentId}`;
+  sendBookingEmail = async (dto: SendBookingDetailsEmailDto) => {
+    const emailString = `${dto.eventTitle} booked. \nEvent date: ${dto.time}. \nLocation: ${dto.location}. \nPaymentId: ${dto.paymentId}`;
 
     const qrcEncodedMessage = await QRCode.toDataURL(emailString);
 
     const mailOptions = {
       from: 'alahirajeffrey@gmail.com',
-      to: to,
-      subject: `Booking ${subject}`,
+      to: dto.to,
+      subject: `Booking ${dto.subject}`,
       attachDataUrls: true,
       html: `<p>Scan the QR code to view your booking details</p>
           <br>
