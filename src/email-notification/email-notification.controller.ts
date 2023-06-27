@@ -10,22 +10,22 @@ import { MessagePattern } from '@nestjs/microservices';
 export class EmailNotificationController {
   constructor(private readonly emailService: EmailNotificationService) {}
 
-  @MessagePattern('send-otp')
+  @MessagePattern({ cmd: 'send-otp' })
   async sendOtpEail(@Body() dto: SendOtpEmailDto) {
     return this.emailService.sendOtpEmail(dto);
   }
 
-  @MessagePattern('send-event-details')
+  @MessagePattern({ cmd: 'send-event-details' })
   async sendEventDetailsEmail(@Body() dto: SendEventDetailsEmailDto) {
     return this.emailService.sendEventDetailsEmail(dto);
   }
 
-  @MessagePattern('send-price-update')
+  @MessagePattern({ cmd: 'send-price-update' })
   async sendPriceSetorUpdateEmail(@Body() dto: SendPriceSetorUpdateEmail) {
     return this.emailService.sendPriceSetorUpdateEmail(dto);
   }
 
-  @MessagePattern('send-booking-details')
+  @MessagePattern({ cmd: 'send-booking-details' })
   async sendBookingDetailsEmail(@Body() dto: SendBookingDetailsEmailDto) {
     return this.emailService.sendBookingDetailsEmail(dto);
   }
