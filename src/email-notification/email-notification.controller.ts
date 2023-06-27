@@ -1,30 +1,31 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller } from '@nestjs/common';
 import { EmailNotificationService } from './email-notification.service';
 import { SendOtpEmailDto } from './dto/send-otp.dto';
 import { SendEventDetailsEmailDto } from './dto/send-event-details.dto';
 import { SendPriceSetorUpdateEmail } from './dto/price-updated.dto';
 import { SendBookingDetailsEmailDto } from './dto/send-booking-details.dto';
+import { MessagePattern } from '@nestjs/microservices';
 
 @Controller('email-notification')
 export class EmailNotificationController {
   constructor(private readonly emailService: EmailNotificationService) {}
 
-  @Post('send-otp')
+  @MessagePattern('send-otp')
   async sendOtpEail(@Body() dto: SendOtpEmailDto) {
     return this.emailService.sendOtpEmail(dto);
   }
 
-  @Post('send-event-details')
+  @MessagePattern('send-event-details')
   async sendEventDetailsEmail(@Body() dto: SendEventDetailsEmailDto) {
     return this.emailService.sendEventDetailsEmail(dto);
   }
 
-  @Post('send-price-update')
+  @MessagePattern('send-price-update')
   async sendPriceSetorUpdateEmail(@Body() dto: SendPriceSetorUpdateEmail) {
     return this.emailService.sendPriceSetorUpdateEmail(dto);
   }
 
-  @Post('send-booking-details')
+  @MessagePattern('send-booking-details')
   async sendBookingDetailsEmail(@Body() dto: SendBookingDetailsEmailDto) {
     return this.emailService.sendBookingDetailsEmail(dto);
   }
