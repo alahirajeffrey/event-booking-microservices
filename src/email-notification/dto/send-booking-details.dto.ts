@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsEnum, IsNotEmpty, IsString, IsUUID } from 'class-validator';
-import EventStatusEnum from 'src/enums/event-status.enum';
+import { IsDateString, IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import EventStatusEnum from 'src/common/enums/event-status.enum';
 
 export class SendBookingDetailsEmailDto {
   @IsString()
@@ -18,13 +18,14 @@ export class SendBookingDetailsEmailDto {
   @ApiProperty()
   location: string;
 
-  @IsDate()
+  @IsDateString()
   @IsNotEmpty()
   @ApiProperty()
   time: Date;
 
+  @IsString()
   @ApiProperty()
-  paymentId: null | string;
+  paymentId: string | null;
 
   @IsEnum(EventStatusEnum)
   @IsNotEmpty()
