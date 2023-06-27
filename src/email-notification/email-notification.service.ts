@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createTransport } from 'nodemailer';
 import * as Mail from 'nodemailer/lib/mailer';
-import QRCode from 'qrcode';
+import * as qrcode from 'qrcode';
 import { SendOtpEmailDto } from './dto/send-otp.dto';
 import { SendEventDetailsEmailDto } from './dto/send-event-details.dto';
 import { SendBookingDetailsEmailDto } from './dto/send-booking-details.dto';
@@ -109,10 +109,10 @@ export class EmailNotificationService {
    * send booking details via email
    * @param dto: send booking details email
    */
-  sendBookingEmail = async (dto: SendBookingDetailsEmailDto) => {
+  sendBookingDetailsEmail = async (dto: SendBookingDetailsEmailDto) => {
     const emailString = `${dto.eventTitle} booked. \nEvent date: ${dto.time}. \nLocation: ${dto.location}. \nPaymentId: ${dto.paymentId}`;
 
-    const qrcEncodedMessage = await QRCode.toDataURL(emailString);
+    const qrcEncodedMessage = await qrcode.toDataURL(emailString);
 
     const mailOptions = {
       from: 'alahirajeffrey@gmail.com',
