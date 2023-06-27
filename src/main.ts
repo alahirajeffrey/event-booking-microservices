@@ -18,6 +18,5 @@ async function bootstrap() {
   );
 
   await app.listen();
-  console.log('Notification microservice started');
 }
 bootstrap();
