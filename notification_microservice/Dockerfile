@@ -1,6 +1,6 @@
 FROM node:18-alpine
 
-WORKDIR /user/src/app
+WORKDIR /user/notification_microservice
 
 COPY package.json package-lock.json ./
 
