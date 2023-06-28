@@ -6,7 +6,7 @@ services:
     ports:
     - "3000:3000"
     networks:
-      - event_booking_microservices
+      - microservices
 
   postgres:
     image: postgres:15.1
